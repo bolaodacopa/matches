@@ -1,0 +1,12 @@
+version: '3.0'
+services:
+    matches-server:
+        container_name: matches-server
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: matches-server:latest
+        ports:
+          - 8083:8083
+        env_file:
+          - ./matches.env
