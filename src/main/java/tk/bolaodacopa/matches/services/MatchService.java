@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -81,10 +82,6 @@ public class MatchService {
 		}
 
 		return matchRepository.saveAll(listMatches);
-	}	
-
-	public List<Match> findAll() {
-		return matchRepository.findAll();
 	}
 
 	public Match getByMatchcode(String matchcode) {
@@ -124,6 +121,24 @@ public class MatchService {
 		match.setFinishedmatch(finishedmatch);
 
 		return matchRepository.save(match);
+	}
+
+	public List<Match> findAllByRequestParam(Map<String, String> allParams) {
+		List<Match> matches = new ArrayList<Match>();
+		String stage = allParams.getOrDefault("stage", null);
+		String group = allParams.getOrDefault("group", null);
+
+		if((stage != null) && (group != null)) {
+			matches = matchRepository.findAllByMatchgroupAndStageName(group, stage);
+		} else if((stage != null)) {
+			matches = matchRepository.findAllByStageName(stage);
+		} else if((group != null)) {
+			matches = matchRepository.findAllByMatchgroup(group);
+		} else {
+			matches = matchRepository.findAll();
+		}
+
+		return matches;
 	}
 
 }

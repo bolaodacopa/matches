@@ -1,6 +1,7 @@
 package tk.bolaodacopa.matches.controllers;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,11 +56,13 @@ public class MatchController {
 	public Match findByFifacode(@RequestHeader("x-token-subject") String sub, 
 			@PathVariable String matchcode) {
 		return this.service.getByMatchcode(matchcode);
-	}	
+	}
 	
-	@GetMapping
-	public List<Match> findAll(@RequestHeader("x-token-subject") String sub) {
-		return this.service.findAll();
-	}	
+	@GetMapping()
+	@ResponseStatus(HttpStatus.OK)
+	public List<Match> findAllByRequestParam(@RequestHeader("x-token-subject") String sub, 
+			@RequestParam Map<String,String> allParams) {
+		return this.service.findAllByRequestParam(allParams);
+	}
 
 }
